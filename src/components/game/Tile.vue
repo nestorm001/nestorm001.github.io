@@ -15,7 +15,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import TileInfo from "@/components/game/TileInfo.ts";
-import TWEEN from "@tweenjs/tween.js";
+import * as TWEEN from "@tweenjs/tween.js";
 
 @Component
 export default class Tile extends Vue {
@@ -28,7 +28,7 @@ export default class Tile extends Vue {
   MAX = 12;
   moveATile = 111.11;
   private card!: HTMLElement;
-  private currentTween: TWEEN.Tween;
+  private currentTween = new TWEEN.Tween({ scale: 1, x: 0, y: 0 });
   private tweenTranslate = new TWEEN.Group();
   private tweenScale = new TWEEN.Group();
 
@@ -73,10 +73,13 @@ export default class Tile extends Vue {
       this.currentTween.stop();
     }
     this.currentTween = new TWEEN.Tween(
-      { x: startValue.row, y: startValue.column },
+      { x: startValue.row, y: startValue.column, scale: 0 },
       this.tweenTranslate
     )
-      .to({ x: endValue.row, y: endValue.column }, this.randomDuration())
+      .to(
+        { x: endValue.row, y: endValue.column, scale: 0 },
+        this.randomDuration()
+      )
       .easing(TWEEN.Easing.Cubic.InOut)
       .onUpdate(value => {
         this.card.style.setProperty(
@@ -121,8 +124,11 @@ export default class Tile extends Vue {
     if (this.currentTween) {
       this.currentTween.stop();
     }
-    this.currentTween = new TWEEN.Tween({ scale: 0.8 }, this.tweenScale)
-      .to({ scale: 1.0 }, this.randomDuration())
+    this.currentTween = new TWEEN.Tween(
+      { scale: 0.8, x: 0, y: 0 },
+      this.tweenScale
+    )
+      .to({ scale: 1.0, x: 0, y: 0 }, this.randomDuration())
       .easing(TWEEN.Easing.Back.Out)
       .onUpdate(value => {
         this.card.style.setProperty("transform", `scale(${value.scale})`);
