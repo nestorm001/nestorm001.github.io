@@ -28,7 +28,7 @@ export default class Control extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 1024px) {
   .arrow-controls {
     display: none;
   }
